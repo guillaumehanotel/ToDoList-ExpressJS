@@ -1,0 +1,27 @@
+{
+  "name": "todolist-expressjs",
+  "version": "1.0.0",
+  "description": "To Do List with ExpressJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaumehanotel/ToDoList-ExpressJS.git"
+  },
+  "author": "Guillaume HANOTEL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/guillaumehanotel/ToDoList-ExpressJS/issues"
+  },
+  "homepage": "https://github.com/guillaumehanotel/ToDoList-ExpressJS#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-ejs-extend": "0.0.1",
+    "sqlite": "^2.9.2"
+  }
+}
