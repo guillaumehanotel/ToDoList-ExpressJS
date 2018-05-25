@@ -1,6 +1,9 @@
 const router = require('express').Router();
 
 
+// Route User
+router.use(require('./user'));
+
 
 router.get('/', function(request, response) {
 
@@ -8,7 +11,6 @@ router.get('/', function(request, response) {
         html: () => { response.render('index.ejs') },
         json: () => { response.send("ok")}
     })
-
 
 });
 

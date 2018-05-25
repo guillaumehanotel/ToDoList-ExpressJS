@@ -26,8 +26,8 @@ app.use(require('./controllers'));
 app.use(function(req, res, next) {
     let err = new Error('Not Found');
     err.status = 404;
-    console.log(err)
-    next(err)
+    console.log(err);
+    next(err);
 });
 
 // Gestion des erreurs
@@ -40,7 +40,7 @@ app.use(function(err, req, res, next) {
 
     data.error = err.stack;
 
-    console.log(data.error)
+    console.log(data.error);
 
     // On set le status de la réponse
     res.status(data.status);
