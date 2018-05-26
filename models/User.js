@@ -16,7 +16,6 @@ class User {
     }
 
 
-
     // POST /users
     static create(user_data, callback, next){
 
@@ -45,6 +44,20 @@ class User {
             })
             .catch(next)
     }
+
+
+    static findByEmail(email, callback, next){
+
+        let query_select_user = "SELECT rowid, * FROM users WHERE email = ?";
+
+        db.get(query_select_user, email)
+            .then((row) => {
+                callback(row);
+            })
+            .catch(next)
+
+    }
+
 
     // GET /users
     static findAll(callback, next){

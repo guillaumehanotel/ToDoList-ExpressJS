@@ -150,8 +150,8 @@ router.put('/users/:userId', function (request, response, next) {
 
                     response.format({
                         html: () => {
-                            console.log('ok')
                             response.end();
+                            // c'est le callback de la requete ajax qui redirige
                         },
                         json: () => {
                             response.send(rowUser);

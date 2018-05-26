@@ -3,6 +3,23 @@ $(document).ready(function () {
 
     $('a.delete').click(requestAPIDeleteUser);
     $('button#btnUpdateUser').on("click", requestAPIUpdateUser);
+    $('#logout').on("click", requestAPIDeleteSession);
+
+
+    function requestAPIDeleteSession() {
+
+        $.ajax({
+            url: '/sessions/',
+            type: 'DELETE',
+            success: function (result, status) {
+                window.location.replace('/users');
+            },
+            error: function (result, status, error) {
+                console.log(error)
+            }
+
+        });
+    }
 
 
     /**
