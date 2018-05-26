@@ -15,8 +15,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// LOGGER
+app.use((req, res, next) => {
+    next();
+    console.log('REQUEST: ' + req.method + ' ' + req.url);
+});
+
 // fichiers statiques
-app.use('/assets', express.static('public'));
+app.use('/public', express.static('public'));
 
 // Routes
 app.use(require('./controllers'));

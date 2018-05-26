@@ -97,7 +97,7 @@ router.post('/users', function (request, response, next) {
 
         response.format({
             html: () => {
-                response.redirect('/users/add')
+                response.redirect(303, '/users/add')
             },
             json: () => {
                 response.send({"error" : "Please fill all fields"})
@@ -110,8 +110,21 @@ router.post('/users', function (request, response, next) {
 
 
 // EDIT (view used to display the form for editing existing content)
-router.get('/users/:userId/edit', function (request, response) {
-    response.render('users/edit.ejs');
+router.get('/users/:userId/edit', function (request, response, next) {
+
+    let userId = request.params.userId;
+
+    if (!isNaN(userId)) {
+        User.find(userId, function (rowUser) {
+
+            let user = new User(rowUser);
+
+            response.render('users/edit.ejs', {user: user});
+
+        }, next);
+    } else {
+        next(new Error("Invalid ID : '" + userId + "'"))
+    }
 });
 
 
@@ -137,7 +150,8 @@ router.put('/users/:userId', function (request, response, next) {
 
                     response.format({
                         html: () => {
-                            response.redirect('/users')
+                            console.log('ok')
+                            response.end();
                         },
                         json: () => {
                             response.send(rowUser);
@@ -148,10 +162,9 @@ router.put('/users/:userId', function (request, response, next) {
             }, next);
 
         } else {
-
             response.format({
                 html: () => {
-                    response.redirect('/users/add')
+                    response.redirect(303, '/users/'+ userId +'/edit')
                 },
                 json: () => {
                     response.send({"error" : "Please fill all fields"})
@@ -176,7 +189,8 @@ router.delete('/users/:userId', function (request, response, next) {
         User.delete(userId, function () {
             response.format({
                 html: () => {
-                    response.redirect('/users')
+                    response.end();
+                    // c'est le callback de la requete ajax qui redirige
                 },
                 json: () => {
                     response.status(204).end();
