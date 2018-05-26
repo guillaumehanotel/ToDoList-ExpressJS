@@ -24,6 +24,12 @@ router.get('/users', function (request, response) {
 });
 
 
+// ADD (view used to display the form for adding content)
+router.get('/users/add', function (request, response) {
+    response.render('users/edit.ejs'); // ou add.ejs
+});
+
+
 // SHOW (one element)
 router.get('/users/:userId', function (request, response, next) {
 
@@ -56,10 +62,7 @@ router.get('/users/:userId', function (request, response, next) {
 });
 
 
-// ADD (view used to display the form for adding content)
-router.get('/users/add', function (request, response) {
-    response.render('users/edit.ejs'); // ou add.ejs
-});
+
 
 
 // CREATE (backend code that handles the Add form)
@@ -113,38 +116,90 @@ router.get('/users/:userId/edit', function (request, response) {
 
 
 // UPDATE (backend code that handles the Edit form)
-router.put('/users/:userId', function (request, response) {
-    response.format({
-        html: () => {
-            response.redirect('/users')
-        },
-        json: () => {
-            response.send("update ok")
+router.put('/users/:userId', function (request, response, next) {
+
+    let userId = request.params.userId;
+
+    if (!isNaN(userId)) {
+        if (!checkEmptyFields(request.body)) {
+
+            let user_data = [
+                request.body.pseudo,
+                bcrypt.hashSync(request.body.password, saltRounds),
+                request.body.email,
+                request.body.firstname,
+                request.body.lastname
+            ];
+
+            User.update(userId, user_data, function () {
+
+                User.find(userId, function (rowUser) {
+
+                    response.format({
+                        html: () => {
+                            response.redirect('/users')
+                        },
+                        json: () => {
+                            response.send(rowUser);
+                        }
+                    })
+
+                }, next);
+            }, next);
+
+        } else {
+
+            response.format({
+                html: () => {
+                    response.redirect('/users/add')
+                },
+                json: () => {
+                    response.send({"error" : "Please fill all fields"})
+                }
+            })
         }
-    })
+
+    } else {
+        next(new Error("Invalid ID : '" + userId + "'"))
+    }
+
 });
 
 
 // DELETE (backend code that handles the Delete form)
-router.delete('/users/:userId', function (request, response) {
-    response.format({
-        html: () => {
-            response.redirect('/users')
-        },
-        json: () => {
-            response.send("delete ok")
-        }
-    })
+router.delete('/users/:userId', function (request, response, next) {
+
+    let userId = request.params.userId;
+
+    if (!isNaN(userId)) {
+
+        User.delete(userId, function () {
+            response.format({
+                html: () => {
+                    response.redirect('/users')
+                },
+                json: () => {
+                    response.status(204).end();
+                }
+            })
+        }, next);
+
+    } else {
+        next(new Error("Invalid ID : '" + userId + "'"))
+    }
+
 });
 
 
 function checkEmptyFields(fields) {
     for (let field in fields) {
-        if (!field) {
+        if (!fields[field]) {
             return true;
         }
     }
     return false;
 }
+
+
 
 module.exports = router;

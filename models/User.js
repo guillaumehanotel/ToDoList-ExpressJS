@@ -56,12 +56,32 @@ class User {
     }
 
     // PUT /users/:id
-    static update(id, user_data, callback){
+    static update(id, user_data, callback, next){
+
+        let timestamp = Math.round(new Date().getTime() / 1000);
+        user_data.push(timestamp);
+        user_data.push(id);
+
+        let query_update_user = "UPDATE users SET pseudo = ?, password = ?, email = ?, firstname = ?, lastname = ?, updatedAt = ? WHERE rowid = ?";
+
+        db.run(query_update_user, user_data)
+            .then(() => {
+                callback();
+            })
+            .catch(next)
 
     }
 
     // DELETE /users/:id
-    static delete(id, callback){
+    static delete(id, callback, next){
+
+        let query_delete_user = "DELETE FROM users WHERE rowid = ?";
+
+        db.run(query_delete_user, id)
+            .then(() => {
+                callback();
+            })
+            .catch(next)
 
     }
 
