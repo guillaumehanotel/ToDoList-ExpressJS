@@ -31,7 +31,7 @@
             </thead>
             <tbody>
             <% for (user of users) { %>
-                <tr id="user-<% user.id %>">
+                <tr id="user-<%= user.id %>">
                     <td><%= user.pseudo %></td>
                     <td><%= user.email %></td>
                     <td><%= user.firstname %></td>
@@ -41,7 +41,7 @@
                         <a href="/users/<%= user.id %>/edit" class="edit">
                             <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                         </a>
-                        <a href="#" data-user_id=<%= user.id %> class="delete">
+                        <a href="#" class="delete deleteUser" data-user_id=<%= user.id %>>
                             <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
                         </a>
                     </td>

@@ -5,6 +5,7 @@ db.open('todolist_express.db').then(() => {
 
     createTableUsers();
     createTableSessions();
+    createTableTodos();
 
 });
 
@@ -25,6 +26,16 @@ function createTableSessions(){
         console.error('ERR> ', err)
     })
 }
+
+function createTableTodos(){
+    db.run("CREATE TABLE IF NOT EXISTS todos (userId, message, createdAt, updatedAt, completedAt)")
+        .then(() => {
+            console.log(('> Table todos created'))
+        }).catch((err) => {
+        console.error('ERR> ', err)
+    })
+}
+
 
 
 module.exports = db;

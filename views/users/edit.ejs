@@ -2,7 +2,7 @@
 
 <main>
 
-    <% if (locals.user){ %>
+    <% if (locals.editedUser){ %>
     <h1>Update User</h1>
     <% } else { %>
     <h1>Create User</h1>
@@ -11,9 +11,9 @@
     <div class="form-wrapper row">
         <div class="col-md-5">
 
-            <% if (locals.user){ %>
+            <% if (locals.editedUser){ %>
             <form>
-                <input type="hidden" name="id" value="<%= user.id %>"/>
+                <input type="hidden" name="id" value="<%= editedUser.id %>"/>
             <% } else { %>
             <form method="POST" action="/users">
             <% } %>
@@ -22,13 +22,13 @@
                         <label for="InputPseudo">Pseudo</label>
                         <input name="pseudo" type="text" class="form-control"
                                id="InputPseudo" placeholder="Enter pseudo"
-                               value="<%= locals.user ? user.pseudo : '' %>">
+                               value="<%= locals.editedUser ? editedUser.pseudo : '' %>">
                     </div>
                     <div class="form-group">
                         <label for="InputEmail">Email address</label>
                         <input name="email" type="email" class="form-control"
                                id="InputEmail" placeholder="Enter email"
-                               value="<%= locals.user ? user.email : '' %>">
+                               value="<%= locals.editedUser ? editedUser.email : '' %>">
                     </div>
                     <div class="form-group">
                         <label for="InputPassword">Password</label>
@@ -39,13 +39,13 @@
                         <label for="InputFirstname">Firstname</label>
                         <input name="firstname" type="text" class="form-control"
                                id="InputFirstname" placeholder="Enter Firstname"
-                               value="<%= locals.user ? user.firstname : '' %>">
+                               value="<%= locals.editedUser ? editedUser.firstname : '' %>">
                     </div>
                     <div class="form-group">
                         <label for="InputLastname">Lastname</label>
                         <input name="lastname" type="text" class="form-control"
                                id="InputLastname" placeholder="Enter Lastname"
-                               value="<%= locals.user ? user.lastname : '' %>">
+                               value="<%= locals.editedUser ? editedUser.lastname : '' %>">
                     </div>
 
                     <button id="btnUpdateUser" type="submit" class="btn btn-primary">Submit</button>

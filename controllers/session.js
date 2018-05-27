@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/User');
 const Session = require('../models/Session');
 const bcrypt = require('bcrypt');
+const helper = require('../helpers/helper');
 
 
 // GET / => Affiche un formulaire user/pass
@@ -20,7 +21,7 @@ router.post('/sessions', function (request, response, next) {
     // chercher le mec par l'email et vérifier le mdp
     // si tout est bon, choper son id et le passer à la cr"ation de session
 
-    if (!checkEmptyFields(request.body)) {
+    if (!helper.checkEmptyFields(request.body)) {
 
             let email = request.body.email;
             let plainPassword = request.body.password;
@@ -35,6 +36,8 @@ router.post('/sessions', function (request, response, next) {
                         Session.find(rowUser.rowid, (rowSession) => {
 
                             let accessToken = rowSession.accessToken;
+
+                            // session
                             request.session.user = rowUser;
 
                             response.format({
@@ -84,15 +87,6 @@ router.delete('/sessions', function (request, response, next) {
 
 });
 
-
-function checkEmptyFields(fields) {
-    for (let field in fields) {
-        if (!fields[field]) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 module.exports = router;

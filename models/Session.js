@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const helper = require('../helpers/helper');
 
 
 
@@ -17,8 +18,8 @@ class Session {
 
         require('crypto').randomBytes(48, function (err, buffer) {
             let token = buffer.toString('hex');
-            let timestamp_now = Math.round(new Date().getTime() / 1000);
-            let timestamp_1_hour = Math.round(new Date().addHours(1).getTime() / 1000);
+            let timestamp_now = helper.getTimestampWithHours();
+            let timestamp_1_hour = helper.getTimestampWithHours(1);
 
             let session_data = [userId, token, timestamp_now, timestamp_1_hour];
             let query_insert_session = "INSERT INTO sessions (userId, accessToken, createdAt, expiresAt) VALUES (?, ?, ?, ?)";
@@ -68,11 +69,5 @@ class Session {
 
 
 }
-
-
-Date.prototype.addHours = function(h){
-    this.setHours(this.getHours()+h);
-    return this;
-};
 
 module.exports = Session;

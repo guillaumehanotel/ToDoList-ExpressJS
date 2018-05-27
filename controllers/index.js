@@ -5,15 +5,15 @@ const router = require('express').Router();
 router.use(require('./user'));
 
 // Route Session
-router.use(require('./session'))
+router.use(require('./session'));
+
+// Route Todo
+router.use(require('./todo'));
 
 
 router.get('/', function(request, response) {
 
-    response.format({
-        html: () => { response.render('index.ejs') },
-        json: () => { response.send("ok")}
-    })
+    response.redirect('/todos');
 
 });
 

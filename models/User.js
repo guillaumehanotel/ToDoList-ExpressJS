@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const helper = require('../helpers/helper');
 
 
 
@@ -19,7 +20,7 @@ class User {
     // POST /users
     static create(user_data, callback, next){
 
-        let timestamp = Math.round(new Date().getTime() / 1000);
+        let timestamp = helper.getTimestampWithHours();
         user_data.push(timestamp);
         user_data.push(null);
 
@@ -42,7 +43,7 @@ class User {
             .then((row) => {
                 callback(row);
             })
-            .catch(next)
+            .catch(next);
     }
 
 
@@ -71,7 +72,7 @@ class User {
     // PUT /users/:id
     static update(id, user_data, callback, next){
 
-        let timestamp = Math.round(new Date().getTime() / 1000);
+        let timestamp = helper.getTimestampWithHours();
         user_data.push(timestamp);
         user_data.push(id);
 

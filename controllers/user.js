@@ -2,6 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const User = require('../models/User');
+const helper = require('../helpers/helper');
 
 
 // INDEX (lists the elements available for editing; also displays the delete form)
@@ -62,13 +63,10 @@ router.get('/users/:userId', function (request, response, next) {
 });
 
 
-
-
-
 // CREATE (backend code that handles the Add form)
 router.post('/users', function (request, response, next) {
 
-    if (!checkEmptyFields(request.body)) {
+    if (!helper.checkEmptyFields(request.body)) {
 
         let user_data = [
             request.body.pseudo,
@@ -89,7 +87,7 @@ router.post('/users', function (request, response, next) {
                         response.send(rowUser)
                     }
                 })
-            });
+            }, next);
 
         }, next);
 
@@ -119,7 +117,7 @@ router.get('/users/:userId/edit', function (request, response, next) {
 
             let user = new User(rowUser);
 
-            response.render('users/edit.ejs', {user: user});
+            response.render('users/edit.ejs', {editedUser: user});
 
         }, next);
     } else {
@@ -134,7 +132,7 @@ router.put('/users/:userId', function (request, response, next) {
     let userId = request.params.userId;
 
     if (!isNaN(userId)) {
-        if (!checkEmptyFields(request.body)) {
+        if (!helper.checkEmptyFields(request.body)) {
 
             let user_data = [
                 request.body.pseudo,
@@ -203,16 +201,6 @@ router.delete('/users/:userId', function (request, response, next) {
     }
 
 });
-
-
-function checkEmptyFields(fields) {
-    for (let field in fields) {
-        if (!fields[field]) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 

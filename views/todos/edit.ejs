@@ -1,0 +1,35 @@
+<% extend('../layout') %>
+
+<main>
+
+    <% if (locals.editedTodo){ %>
+    <h1>Update Todo</h1>
+    <% } else { %>
+    <h1>Create Todo</h1>
+    <% } %>
+
+    <div class="form-wrapper row">
+        <div class="col-md-5">
+
+            <% if (locals.editedTodo){ %>
+            <form>
+                <input type="hidden" name="id" value="<%= editedTodo.id %>"/>
+                <% } else { %>
+                <form method="POST" action="/todos">
+                    <% } %>
+
+                    <input type="hidden" name="userId" value="<%= locals.user.rowid %>"/>
+
+                    <div class="form-group">
+                        <label for="InputMessage">Message</label>
+                        <input name="message" type="text" class="form-control"
+                               id="InputMessage" placeholder="Enter message"
+                               value="<%= locals.editedTodo ? editedTodo.message : '' %>">
+                    </div>
+
+                    <button id="btnUpdateTodo" type="submit" class="btn btn-primary">Submit</button>
+                </form>
+        </div>
+    </div>
+
+</main>

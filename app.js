@@ -24,6 +24,7 @@ app.use(function (req, res, next) {
     if(req.session.user)
         res.locals.user = req.session.user;
 
+
     next();
 });
 
@@ -46,11 +47,15 @@ app.use('/public', express.static('public'));
 
 // Middleware Authentification
 app.use(function (req, res, next) {
+
     if(req.originalUrl !== "/sessions"){
         auth.checkAuthentification(req, res, next);
     } else {
         next();
     }
+
+    //next();
+
 });
 
 

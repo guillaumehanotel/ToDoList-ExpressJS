@@ -28,6 +28,7 @@ module.exports = {
                 if (this.isAccessTokenValid(rowSession) === false) {
                     response.redirect('/sessions')
                 }
+                console.log('session ok')
                 next();
             }, next);
         } else {
