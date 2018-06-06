@@ -108,3 +108,9 @@ table.table .avatar {
 nav {
     margin-bottom: 50px;
 }
+
+.checkTodo {
+    position: relative;
+    top: 1px;
+    left: 8px;
+}

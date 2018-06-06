@@ -9,7 +9,42 @@ $(document).ready(function () {
     $('.deleteTodo').on("click", requestAPIDeleteTodo);
     $('button#btnUpdateTodo').on("click", requestAPIUpdateTodo);
 
+    $('.checkTodo').on("click", requestCheckTodo);
 
+
+    function requestCheckTodo() {
+
+        let input = $(this);
+
+        let td = input.parent().parent();
+        let message = td.next().next().html();
+        let userId = td.next().data('userid');
+        let todoId = td.parent().attr('id').split('-')[1];
+
+        let data = {
+            message: message,
+            userId: userId,
+            completed: true
+        };
+
+
+        $.ajax({
+            url: '/todos/'+ todoId,
+            type: 'PUT',
+            data: data,
+            success : function (result, status) {
+                window.location.replace('/todos');
+            },
+            error: function (result, status, error) {
+                console.log(error);
+            }
+        })
+
+
+
+
+
+    }
 
     function requestAPIUpdateTodo() {
         let btn = $(this);
@@ -18,9 +53,11 @@ $(document).ready(function () {
             event.preventDefault();
 
             let form_data_array = $('form').serializeArray();
-            console.log(form_data_array)
+            console.log(form_data_array);
+
             let todoId = form_data_array.shift()['value'];
             let form_data = objectifyForm(form_data_array);
+            console.log(form_data);
 
             $.ajax({
                 url: '/todos/'+ todoId,

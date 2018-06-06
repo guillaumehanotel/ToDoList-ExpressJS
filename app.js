@@ -42,18 +42,6 @@ app.use((req, res, next) => {
 app.use('/public', express.static('public'));
 
 
-// Middleware : use current user data in views
-app.use(function (req, res, next) {
-
-    //console.log(req.cookies)
-    if (helper.isAccessTokenExist(req)) {
-        helper.addCurrentUserToLocals(req, res, next, Session);
-    } else {
-        next();
-    }
-
-});
-
 
 // Middleware Authentification
 app.use(function (req, res, next) {
@@ -67,9 +55,23 @@ app.use(function (req, res, next) {
         next();
     }
 
-   // next();
+    // next();
 
 });
+
+
+// Middleware : use current user data in views
+app.use(function (req, res, next) {
+
+    //console.log(req.cookies)
+    if (helper.isAccessTokenExist(req)) {
+        helper.addCurrentUserToLocals(req, res, next, Session);
+    } else {
+        next();
+    }
+
+});
+
 
 
 // Routes

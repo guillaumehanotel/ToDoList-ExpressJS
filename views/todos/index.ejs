@@ -33,10 +33,14 @@
             <tr id="todo-<%= todo.id %>">
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="checkTodo">
+                        <% if(todo.completedAt) { %>
+                        <input class="form-check-input checkTodo" type="checkbox" value=""  disabled checked>
+                        <% } else { %>
+                        <input class="form-check-input checkTodo" type="checkbox" value="">
+                        <% } %>
                     </div>
                 </td>
-                <td><%= locals.user.pseudo %></td>
+                <td data-userId="<%= todo.userId %>"><%= locals.user.pseudo %></td>
                 <td><%= todo.message %></td>
 
                 <td>

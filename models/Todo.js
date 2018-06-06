@@ -51,7 +51,7 @@ class Todo {
 
     static findByUserId(userId, callback, next){
 
-        let query_select_todo = "SELECT rowid, * FROM todos WHERE userId = ?";
+        let query_select_todo = "SELECT rowid, * FROM todos WHERE userId = ? ORDER BY completedAt";
 
         db.all(query_select_todo, userId.toString())
             .then((row) => {
@@ -74,11 +74,9 @@ class Todo {
     // PUT /todos/:id
     static update(id, todo_data, callback, next){
 
-        let timestamp_now = helper.getTimestampWithHours();
-        todo_data.push(timestamp_now);
         todo_data.push(id);
 
-        let query_update_todo = "UPDATE todos SET userId = ?, message = ?, updatedAt = ? WHERE rowid = ?";
+        let query_update_todo = "UPDATE todos SET userId = ?, message = ?, updatedAt = ?, completedAt = ? WHERE rowid = ?";
 
         db.run(query_update_todo, todo_data)
             .then(() => {
