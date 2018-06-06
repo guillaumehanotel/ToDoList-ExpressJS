@@ -62,8 +62,6 @@ router.get('/todos/:todoId', function (request, response, next) {
 // CREATE (backend code that handles the Add form)
 router.post('/todos', function (request, response, next) {
 
-    console.log(request.body)
-
     if(!helper.checkEmptyFields(request.body)){
 
         let todo_data = [
@@ -79,6 +77,7 @@ router.post('/todos', function (request, response, next) {
 
                 response.format({
                     html: () => {
+                        request.flash('success', "Todo created");
                         response.redirect('/todos');
                     },
                     json: () => {
@@ -90,6 +89,7 @@ router.post('/todos', function (request, response, next) {
     } else {
         response.format({
             html: () => {
+                request.flash('error', "Please fill all fields");
                 response.redirect(303, '/todos/add')
             },
             json: () => {
@@ -109,7 +109,6 @@ router.get('/todos/:todoId/edit', function (request, response, next) {
         Todo.find(todoId, function (rowTodo) {
 
             let todo = new Todo(rowTodo);
-            console.log(todo)
 
             response.render('todos/edit.ejs', {editedTodo: todo});
 
@@ -139,6 +138,7 @@ router.put('/todos/:todoId', function (request, response, next) {
 
                     response.format({
                         html: () => {
+                            request.flash('success', "Todo edited");
                             response.end();
                             // c'est le callback de la requete ajax qui redirige
                         },
@@ -153,6 +153,7 @@ router.put('/todos/:todoId', function (request, response, next) {
         } else {
             response.format({
                 html: () => {
+                    request.flash('error', "Please fill all fields");
                     response.redirect(303, '/todos/'+ todoId +'/edit')
                 },
                 json: () => {
@@ -178,6 +179,9 @@ router.delete('/todos/:todoId', function (request, response, next) {
         Todo.delete(todoId, function () {
             response.format({
                 html: () => {
+
+                    request.session.destroy();
+                    request.flash('success', "Todo deleted");
                     response.end();
                     // c'est le callback de la requete ajax qui redirige
                 },

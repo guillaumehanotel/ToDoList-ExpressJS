@@ -5,6 +5,10 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const auth = require('./middlewares/auth.js');
 
+const helper = require('./helpers/helper.js');
+
+const Session = require('./models/Session');
+
 /*** SETTINGS ***/
 const app = express();
 const PORT = process.PORT || 8080;
@@ -18,15 +22,8 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware Session
 app.use(session({secret: 'secretSessionString'}));
 
-// Middleware : use current user data in views
-app.use(function (req, res, next) {
-
-    if(req.session.user)
-        res.locals.user = req.session.user;
-
-
-    next();
-});
+// Middleware message flash
+app.use(require('./middlewares/flash.js'));
 
 // Middleware body parser
 app.use(bodyParser.urlencoded({extended: false}));
@@ -45,8 +42,24 @@ app.use((req, res, next) => {
 app.use('/public', express.static('public'));
 
 
+// Middleware : use current user data in views
+app.use(function (req, res, next) {
+
+    //console.log(req.cookies)
+    if (helper.isAccessTokenExist(req)) {
+        helper.addCurrentUserToLocals(req, res, next, Session);
+    } else {
+        next();
+    }
+
+});
+
+
 // Middleware Authentification
 app.use(function (req, res, next) {
+
+    console.log("cookie : ")
+    console.log(req.cookies)
 
     if(req.originalUrl !== "/sessions"){
         auth.checkAuthentification(req, res, next);
@@ -54,7 +67,7 @@ app.use(function (req, res, next) {
         next();
     }
 
-    //next();
+   // next();
 
 });
 

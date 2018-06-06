@@ -38,11 +38,12 @@ router.post('/sessions', function (request, response, next) {
                             let accessToken = rowSession.accessToken;
 
                             // session
-                            request.session.user = rowUser;
+                            //request.session.user = rowUser;
 
                             response.format({
                                 html: () => {
 
+                                    console.log('cookie créé');
                                     response.cookie('accessToken', accessToken, { maxAge: 1000*60*60 });
                                     response.redirect('/users')
                                 },
@@ -79,7 +80,7 @@ router.delete('/sessions', function (request, response, next) {
 
     Session.delete(accessToken, () => {
 
-        request.session.destroy();
+        //request.session.destroy();
         response.clearCookie('accessToken');
         response.end();
 

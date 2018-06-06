@@ -1,5 +1,4 @@
 const db = require('../config/db');
-const helper = require('../helpers/helper');
 
 
 
@@ -20,7 +19,7 @@ class User {
     // POST /users
     static create(user_data, callback, next){
 
-        let timestamp = helper.getTimestampWithHours();
+        let timestamp = require('../helpers/helper').getTimestampWithHours();
         user_data.push(timestamp);
         user_data.push(null);
 
@@ -72,7 +71,7 @@ class User {
     // PUT /users/:id
     static update(id, user_data, callback, next){
 
-        let timestamp = helper.getTimestampWithHours();
+        let timestamp = require('../helpers/helper').getTimestampWithHours();
         user_data.push(timestamp);
         user_data.push(id);
 

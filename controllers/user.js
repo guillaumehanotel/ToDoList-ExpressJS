@@ -81,6 +81,7 @@ router.post('/users', function (request, response, next) {
             User.find(lastID, function (rowUser) {
                 response.format({
                     html: () => {
+                        request.flash('success', "User created");
                         response.redirect('/users')
                     },
                     json: () => {
@@ -95,6 +96,7 @@ router.post('/users', function (request, response, next) {
 
         response.format({
             html: () => {
+                request.flash('error', "Please fill all fields");
                 response.redirect(303, '/users/add')
             },
             json: () => {
@@ -148,6 +150,7 @@ router.put('/users/:userId', function (request, response, next) {
 
                     response.format({
                         html: () => {
+                            request.flash('success', "User edited");
                             response.end();
                             // c'est le callback de la requete ajax qui redirige
                         },
@@ -162,6 +165,7 @@ router.put('/users/:userId', function (request, response, next) {
         } else {
             response.format({
                 html: () => {
+                    request.flash('error', "Veuillez remplir tous les champs");
                     response.redirect(303, '/users/'+ userId +'/edit')
                 },
                 json: () => {
@@ -187,6 +191,7 @@ router.delete('/users/:userId', function (request, response, next) {
         User.delete(userId, function () {
             response.format({
                 html: () => {
+                    request.flash('success', "User deleted");
                     response.end();
                     // c'est le callback de la requete ajax qui redirige
                 },

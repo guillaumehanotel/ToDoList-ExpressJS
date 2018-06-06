@@ -22,34 +22,35 @@
                         <label for="InputPseudo">Pseudo</label>
                         <input name="pseudo" type="text" class="form-control"
                                id="InputPseudo" placeholder="Enter pseudo"
-                               value="<%= locals.editedUser ? editedUser.pseudo : '' %>">
+                               value="<%= locals.editedUser ? editedUser.pseudo : '' %>" required="required">
                     </div>
                     <div class="form-group">
                         <label for="InputEmail">Email address</label>
                         <input name="email" type="email" class="form-control"
                                id="InputEmail" placeholder="Enter email"
-                               value="<%= locals.editedUser ? editedUser.email : '' %>">
+                               value="<%= locals.editedUser ? editedUser.email : '' %>" required="required">
                     </div>
                     <div class="form-group">
                         <label for="InputPassword">Password</label>
                         <input name="password" type="password" class="form-control"
-                               id="InputPassword" placeholder="Password">
+                               id="InputPassword" placeholder="Password" required="required">
                     </div>
                     <div class="form-group">
                         <label for="InputFirstname">Firstname</label>
                         <input name="firstname" type="text" class="form-control"
                                id="InputFirstname" placeholder="Enter Firstname"
-                               value="<%= locals.editedUser ? editedUser.firstname : '' %>">
+                               value="<%= locals.editedUser ? editedUser.firstname : '' %>" required="required">
                     </div>
                     <div class="form-group">
                         <label for="InputLastname">Lastname</label>
                         <input name="lastname" type="text" class="form-control"
                                id="InputLastname" placeholder="Enter Lastname"
-                               value="<%= locals.editedUser ? editedUser.lastname : '' %>">
+                               value="<%= locals.editedUser ? editedUser.lastname : '' %>" required="required">
                     </div>
 
                     <button id="btnUpdateUser" type="submit" class="btn btn-primary">Submit</button>
                 </form>
+            </form>
         </div>
     </div>
 

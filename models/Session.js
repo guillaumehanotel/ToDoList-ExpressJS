@@ -52,8 +52,11 @@ class Session {
             .then((rowSession) => {
                 callback(rowSession);
             })
-            .catch(next);
+            .catch((err) => {
+                console.log(err)
+            });
     }
+
 
 
     static delete(token, callback, next){

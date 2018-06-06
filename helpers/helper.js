@@ -1,3 +1,5 @@
+const User = require('../models/User');
+
 
 module.exports = {
 
@@ -8,12 +10,12 @@ module.exports = {
      */
     getTimestampWithHours: function (optionalHour) {
         let date;
-        if (typeof optionalHour === 'undefined'){
+        if (typeof optionalHour === 'undefined') {
             date = new Date();
         } else {
             date = new Date();
             let hour = date.getHours();
-            date.setHours(hour+optionalHour)
+            date.setHours(hour + optionalHour)
         }
         return Math.round(date.getTime() / 1000);
     },
@@ -24,13 +26,43 @@ module.exports = {
      * @param fields
      * @returns {boolean}
      */
-    checkEmptyFields: function(fields) {
+    checkEmptyFields: function (fields) {
         for (let field in fields) {
             if (!fields[field]) {
                 return true;
             }
         }
         return false;
+    },
+
+    isAccessTokenExist: function (request) {
+        if (request.cookies) {
+            return !(request.cookies['accessToken'] === undefined);
+        }
+        return false;
+    },
+
+    addCurrentUserToLocals: async function (request, response, next, Session){
+
+        // 1 : choper l'access token
+        // 2 : requeter table session pour choper la ligne qui possède ce token
+        // 3 : requeter table user pour choper le user qui possède session.userId
+
+        let accessToken  = this.getAccessToken(request, response);
+
+        Session.findByToken(accessToken, (rowSession) => {
+            User.find(rowSession.userId, (rowUser) => {
+                response.locals.user = rowUser;
+                request.session.user = rowUser;
+                next();
+            }, next)
+        }, next);
+    },
+
+    getAccessToken: function (request, response) {
+        if (this.isAccessTokenExist(request)) {
+            return request.cookies['accessToken'];
+        }
     },
 
 
