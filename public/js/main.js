@@ -9,10 +9,10 @@ $(document).ready(function () {
     $('.deleteTodo').on("click", requestAPIDeleteTodo);
     $('button#btnUpdateTodo').on("click", requestAPIUpdateTodo);
 
-    $('.checkTodo').on("click", requestCheckTodo);
+    $('.checkTodo').on("click", requestAPICompletedTodo);
 
 
-    function requestCheckTodo() {
+    function requestAPICompletedTodo() {
 
         let input = $(this);
 
@@ -27,7 +27,6 @@ $(document).ready(function () {
             completed: true
         };
 
-
         $.ajax({
             url: '/todos/'+ todoId,
             type: 'PUT',
@@ -40,11 +39,10 @@ $(document).ready(function () {
             }
         })
 
-
-
-
-
     }
+
+
+
 
     function requestAPIUpdateTodo() {
         let btn = $(this);

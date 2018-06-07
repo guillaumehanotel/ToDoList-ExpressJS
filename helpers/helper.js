@@ -65,5 +65,29 @@ module.exports = {
         }
     },
 
+    isRequestBelongToWhiteList: function (url, method) {
+        const whiteListRequests = [
+            {
+                url: '/users',
+                method: 'POST'
+            },
+            {
+                url: '/sessions',
+                method: 'GET'
+            },
+            {
+                url: '/sessions',
+                method: 'POST'
+            }
+        ];
+
+        for (let whiteListRequest of whiteListRequests) {
+            if(whiteListRequest.url == url && whiteListRequest.method == method){
+                return true
+            }
+        }
+        return false;
+    }
+
 
 };

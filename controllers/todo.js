@@ -136,8 +136,6 @@ router.put('/todos/:todoId', function (request, response, next) {
 
                 let timestamp_now = helper.getTimestampWithHours();
 
-
-
                 // si il existe un champs completed -> la tâche est coché
                 if (request.body.completed) {
                     // on push d'abord un truc vite pour le update qui ne bouge pas
@@ -207,7 +205,6 @@ router.delete('/todos/:todoId', function (request, response, next) {
                 html: () => {
 
                     request.session.destroy();
-                    request.flash('success', "Todo deleted");
                     response.end();
                     // c'est le callback de la requete ajax qui redirige
                 },
@@ -220,7 +217,6 @@ router.delete('/todos/:todoId', function (request, response, next) {
     } else {
         next(new Error("Invalid ID : '" + userId + "'"))
     }
-
 
 });
 

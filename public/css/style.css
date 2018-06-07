@@ -114,3 +114,8 @@ nav {
     top: 1px;
     left: 8px;
 }
+
+.completed {
+    font-size: 11px;
+
+}

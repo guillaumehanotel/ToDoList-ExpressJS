@@ -1,81 +1,68 @@
 const Session = require('../models/Session');
 const helper = require('../helpers/helper');
 
+
+
+/**
+ * Va chercher la session en BDD à partir du token et vérifie la date
+ * @param accessToken
+ */
+function checkToken(accessToken) {
+    return new Promise((resolve, reject) => {
+        Session.findByToken(accessToken, (rowSession) => {
+            resolve(isDateAccessTokenValid(rowSession.expiresAt));
+        });
+    })
+}
+
+/**
+ * valide si la date courante est inférieur à la date limite, alors valide
+ */
+function isDateAccessTokenValid(expirationDate) {
+    return Math.round(new Date().getTime() / 1000) < expirationDate
+}
+
+
+const checkAuthentification = function (request, response, next) {
+
+    response.format({
+        html: function() {
+
+            // test si le cookie est présent
+            if (helper.isAccessTokenExist(request)) {
+
+                let accessToken = request.cookies['accessToken'];
+
+                checkToken(accessToken).then((isTokenValid) => {
+
+                    // check si sa date est valide
+                    if (isTokenValid) {
+                        //valide
+                        console.log('token valide');
+                        next()
+
+                    } else {
+                        // date pas valide -> redirect
+                        console.log('token invalide');
+                        response.redirect('/sessions')
+                    }
+
+                }).catch(next)
+
+            } else {
+                console.log('pas de token');
+                response.redirect(303, '/sessions')
+            }
+
+        }, json: () => {
+            //this.checkJSONAuthentification(request, response, next);
+            // todo token header
+
+        }
+    });
+};
+
+
 module.exports = {
-
-
-    checkAuthentification: function (request, response, next) {
-
-        if (this.isHTML(request)) {
-            this.checkHTMLAuthentification(request, response, next);
-        } else {
-            this.checkJSONAuthentification(request, response, next);
-        }
-
-    },
-
-
-    isHTML: function (request) {
-        return request.get('Accept') !== "application/json"
-    },
-
-
-    checkHTMLAuthentification: function(request, response, next){
-
-        if (helper.isAccessTokenExist(request)) {
-            let accessToken = request.cookies['accessToken'];
-            console.log('token existe');
-
-            Session.findByToken(accessToken, (rowSession) => {
-
-                // si non valide -> redirection vers auth
-                if (this.isAccessTokenValid(rowSession) === false) {
-                    console.log('cookie périmé')
-                    response.redirect('/sessions')
-                }
-
-                console.log('token valide');
-                next();
-
-            }, next);
-        } else {
-            console.log('pas de token');
-            response.redirect(303, '/sessions')
-        }
-    },
-
-
-    isAccessTokenValid: function (session) {
-        let timestamp_now = Math.round(new Date().getTime() / 1000);
-
-        console.log((session.expiresAt - timestamp_now) / 60 + " min de session restante");
-
-        // valide si la date courante est inférieur à la date limite, alors valide
-        return timestamp_now <= session.expiresAt;
-    },
-
-
-
-    checkJSONAuthentification : function(request, response, next){
-           /*
-            if (!this.isHeaderValid(request))
-                next(new Error("X-AccessToken not found"))
-                */
-    },
-
-
-
-
-    isHeaderValid: function (request) {
-
-        return true;
-
-    },
-
-
-
-
-
-
-
+    checkAuthentification: checkAuthentification
 };

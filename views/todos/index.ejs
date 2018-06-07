@@ -41,7 +41,11 @@
                     </div>
                 </td>
                 <td data-userId="<%= todo.userId %>"><%= locals.user.pseudo %></td>
-                <td><%= todo.message %></td>
+                <td><%= todo.message %>
+                    <% if(todo.completedAt) { %>
+                    <span class="completed">(complété le <%= timestampToDate(todo.completedAt) %>)</span>
+                    <% }  %>
+                </td>
 
                 <td>
                     <a href="/todos/<%= todo.id %>/edit" class="edit">

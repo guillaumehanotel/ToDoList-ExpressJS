@@ -45,7 +45,7 @@ router.post('/sessions', function (request, response, next) {
 
                                     console.log('cookie créé');
                                     response.cookie('accessToken', accessToken, { maxAge: 1000*60*60*24 });
-                                    response.redirect('/users')
+                                    response.redirect('/todos')
                                 },
                                 json: () => {
                                     response.send(accessToken);

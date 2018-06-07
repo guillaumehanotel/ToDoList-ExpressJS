@@ -4,10 +4,15 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const auth = require('./middlewares/auth.js');
-
 const helper = require('./helpers/helper.js');
 
 const Session = require('./models/Session');
+
+// TODO pour gérer PUT : method-override, dans le form edit : mettre action=action
+// app.use(methodOverride('_method'))
+//
+
+
 
 /*** SETTINGS ***/
 const app = express();
@@ -18,9 +23,30 @@ app.engine('ejs', require('express-ejs-extend'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+app.locals.timestampToDate =  function(timestamp) {
+
+    let objectDate = new Date(timestamp * 1000);
+    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    let month = months[objectDate.getMonth()];
+    let date = objectDate.getDate();
+    let hour = objectDate.getHours();
+    let min = objectDate.getMinutes();
+
+    return date + " " + month + " à " + hour + "h" + min;
+};
+
 
 // Middleware Session
-app.use(session({secret: 'secretSessionString'}));
+app.set('trust proxy', 1);
+app.use(session({
+    secret: 'secretSessionString',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60,
+        httpOnly:true
+    }
+}));
 
 // Middleware message flash
 app.use(require('./middlewares/flash.js'));
@@ -46,13 +72,13 @@ app.use('/public', express.static('public'));
 // Middleware Authentification
 app.use(function (req, res, next) {
 
-    console.log("cookie : ")
-    console.log(req.cookies)
+    console.log("cookies présents : ");
+    console.log(req.cookies);
 
-    if(req.originalUrl !== "/sessions"){
-        auth.checkAuthentification(req, res, next);
-    } else {
+    if(helper.isRequestBelongToWhiteList(req.originalUrl, req.method)){
         next();
+    } else {
+        auth.checkAuthentification(req, res, next);
     }
 
     // next();
