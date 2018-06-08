@@ -2,5 +2,5 @@
 
 ## Credentials :
 
-  - guillaume.hanotel@ynov.com
-  - erty
+  mail : guillaume.hanotel@ynov.com
+  mdp : erty
