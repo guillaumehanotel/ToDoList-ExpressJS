@@ -2,5 +2,5 @@
 
 ## Credentials :
 
-  guillaume.hanotel@ynov.com
-  erty
+  - guillaume.hanotel@ynov.com
+  - erty
