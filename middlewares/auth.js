@@ -43,7 +43,11 @@ const checkAuthentification = function (request, response, next) {
 
                     } else {
                         // date pas valide -> redirect
-                        console.log('token invalide');
+                        console.log('token périmé');
+                        response.clearCookie('accessToken');
+                        response.locals.connectedUser = null;
+                        request.session.connectedUser = null;
+
                         response.redirect('/sessions')
                     }
 

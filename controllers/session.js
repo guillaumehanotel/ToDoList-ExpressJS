@@ -82,7 +82,7 @@ router.delete('/sessions', function (request, response, next) {
 
         //request.session.destroy();
         response.clearCookie('accessToken');
-        response.end();
+        response.redirect('/sessions')
 
     }, next);
 

@@ -27,7 +27,11 @@ router.get('/users', function (request, response) {
 
 // ADD (view used to display the form for adding content)
 router.get('/users/add', function (request, response) {
-    response.render('users/edit.ejs'); // ou add.ejs
+    response.render('users/edit.ejs', {
+        title: "Create User",
+        user: {},
+        action: "/users"
+    }); // ou add.ejs
 });
 
 
@@ -119,7 +123,11 @@ router.get('/users/:userId/edit', function (request, response, next) {
 
             let user = new User(rowUser);
 
-            response.render('users/edit.ejs', {editedUser: user});
+            response.render('users/edit.ejs', {
+                title: "Update User",
+                user: user,
+                action: "/users/" + userId + "?_method=put"
+            });
 
         }, next);
     } else {
@@ -151,8 +159,7 @@ router.put('/users/:userId', function (request, response, next) {
                     response.format({
                         html: () => {
                             request.flash('success', "User edited");
-                            response.end();
-                            // c'est le callback de la requete ajax qui redirige
+                            response.redirect("/users")
                         },
                         json: () => {
                             response.send(rowUser);
@@ -192,8 +199,7 @@ router.delete('/users/:userId', function (request, response, next) {
             response.format({
                 html: () => {
                     request.flash('success', "User deleted");
-                    response.end();
-                    // c'est le callback de la requete ajax qui redirige
+                    response.redirect("/users")
                 },
                 json: () => {
                     response.status(204).end();

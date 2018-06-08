@@ -1,17 +1,17 @@
+// Packages
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override')
+
+//
 const auth = require('./middlewares/auth.js');
 const helper = require('./helpers/helper.js');
-
 const Session = require('./models/Session');
 
 // TODO pour gérer PUT : method-override, dans le form edit : mettre action=action
-// app.use(methodOverride('_method'))
-//
-
 
 
 /*** SETTINGS ***/
@@ -35,6 +35,8 @@ app.locals.timestampToDate =  function(timestamp) {
     return date + " " + month + " à " + hour + "h" + min;
 };
 
+// Middleware override HTTP methods
+app.use(methodOverride('_method'));
 
 // Middleware Session
 app.set('trust proxy', 1);
@@ -68,7 +70,6 @@ app.use((req, res, next) => {
 app.use('/public', express.static('public'));
 
 
-
 // Middleware Authentification
 app.use(function (req, res, next) {
 
@@ -81,15 +82,12 @@ app.use(function (req, res, next) {
         auth.checkAuthentification(req, res, next);
     }
 
-    // next();
-
 });
 
 
 // Middleware : use current user data in views
 app.use(function (req, res, next) {
 
-    //console.log(req.cookies)
     if (helper.isAccessTokenExist(req)) {
         helper.addCurrentUserToLocals(req, res, next, Session);
     } else {
@@ -97,7 +95,6 @@ app.use(function (req, res, next) {
     }
 
 });
-
 
 
 // Routes
@@ -112,7 +109,10 @@ app.use(function (req, res, next) {
     next(err);
 });
 
+
+
 // Gestion des erreurs
+
 app.use(function (err, req, res, next) {
     // Les données de l'erreur
     let data = {
@@ -137,6 +137,7 @@ app.use(function (err, req, res, next) {
         }
     })
 });
+
 
 
 app.listen(PORT, () => {

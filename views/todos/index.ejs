@@ -33,27 +33,43 @@
             <tr id="todo-<%= todo.id %>">
                 <td>
                     <div class="form-check">
-                        <% if(todo.completedAt) { %>
-                        <input class="form-check-input checkTodo" type="checkbox" value=""  disabled checked>
-                        <% } else { %>
-                        <input class="form-check-input checkTodo" type="checkbox" value="">
-                        <% } %>
+                        <form class="completeTodo<%= todo.id %>" method="POST" action="/todos/<%= todo.id %>/?_method=put">
+
+                            <input type="hidden" name="userId" value="<%= todo.userId %>">
+                            <input type="hidden" name="message" value="<%= todo.message %>">
+                            <input type="hidden" name="completed" value="true">
+
+                            <% if(todo.completedAt) { %>
+                            <input class="form-check-input checkTodo" type="checkbox" value="" disabled checked
+                                   onchange="document.querySelector('form.completeTodo<%= todo.id %>').submit(); return false;">
+                            <% } else { %>
+                            <input class="form-check-input checkTodo" type="checkbox" value=""
+                                   onchange="document.querySelector('form.completeTodo<%= todo.id %>').submit(); return false;">
+                            <% } %>
+
+                        </form>
+
                     </div>
                 </td>
-                <td data-userId="<%= todo.userId %>"><%= locals.user.pseudo %></td>
+                <td data-userId="<%= todo.userId %>"><%= locals.connectedUser.pseudo %></td>
                 <td><%= todo.message %>
                     <% if(todo.completedAt) { %>
                     <span class="completed">(complété le <%= timestampToDate(todo.completedAt) %>)</span>
-                    <% }  %>
+                    <% } %>
                 </td>
 
                 <td>
                     <a href="/todos/<%= todo.id %>/edit" class="edit">
                         <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                     </a>
-                    <a href="#"  class="delete deleteTodo" data-todo_id=<%= todo.id %>>
-                        <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-                    </a>
+
+                    <form class="deleteTodo deleteTodo<%= todo.id %>" method="POST" action="/todos/<%= todo.id %>?_method=DELETE">
+                        <a href="javascript:{}" class="delete"
+                           onclick="document.querySelector('form.deleteTodo<%= todo.id %>').submit(); return false;">
+                            <i typeof="submit" class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                        </a>
+                    </form>
+
                 </td>
             </tr>
             <% } %>

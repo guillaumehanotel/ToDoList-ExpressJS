@@ -52,8 +52,8 @@ module.exports = {
 
         Session.findByToken(accessToken, (rowSession) => {
             User.find(rowSession.userId, (rowUser) => {
-                response.locals.user = rowUser;
-                request.session.user = rowUser;
+                response.locals.connectedUser = rowUser;
+                request.session.connectedUser = rowUser;
                 next();
             }, next)
         }, next);

@@ -18,8 +18,12 @@
 
         <ul class="navbar-nav ml-auto">
 
-            <% if(locals.user) { %>
-            <li class="nav-item" id="logout"><a class="nav-link" href="#">Logout</a></li>
+            <% if(locals.connectedUser) { %>
+            <li class="nav-item" id="logout">
+                <form class="logout" method="POST" action="/sessions?_method=delete">
+                    <a class="nav-link" href="javascript:{}" onclick="document.querySelector('form.logout').submit(); return false;">Logout</a>
+                </form>
+            </li>
             <% } else { %>
             <li class="nav-item"><a class="nav-link" href="/sessions">Login</a></li>
             <% } %>

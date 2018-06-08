@@ -117,5 +117,14 @@ nav {
 
 .completed {
     font-size: 11px;
+}
 
+form.deleteTodo, form.deleteUser {
+    display: inline-block;
+}
+
+.disabled-link {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
 }

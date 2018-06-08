@@ -6,7 +6,7 @@ const helper = require('../helpers/helper');
 // INDEX ALL
 router.get('/todos', function (request, response, next) {
 
-    let currentUserId = request.session.user.rowid;
+    let currentUserId = request.session.connectedUser.rowid;
 
     Todo.findByUserId(currentUserId, function (todoRows) {
 
@@ -20,13 +20,18 @@ router.get('/todos', function (request, response, next) {
                 response.send(todoRows)
             }
         })
-    })
+    }, next)
 });
 
 
 // ADD (view used to display the form for adding content)
 router.get('/todos/add', function (request, response) {
-    response.render('todos/edit.ejs'); // ou add.ejs
+    response.render('todos/edit.ejs',
+        {
+            title: "Create Todo",
+            todo: {},
+            action: "/todos"
+        }); // ou add.ejs
 });
 
 
@@ -73,8 +78,6 @@ router.post('/todos', function (request, response, next) {
 
             Todo.find(lastID, function (rowTodo) {
 
-                console.log(rowTodo)
-
                 response.format({
                     html: () => {
                         request.flash('success', "Todo created");
@@ -110,7 +113,11 @@ router.get('/todos/:todoId/edit', function (request, response, next) {
 
             let todo = new Todo(rowTodo);
 
-            response.render('todos/edit.ejs', {editedTodo: todo});
+            response.render('todos/edit.ejs', {
+                todo: todo,
+                title: "Update Todo",
+                action: "/todos/" + todoId + "?_method=put"
+            });
 
         }, next);
     } else {
@@ -159,8 +166,7 @@ router.put('/todos/:todoId', function (request, response, next) {
                         response.format({
                             html: () => {
                                 request.flash('success', "Todo edited");
-                                response.end();
-                                // c'est le callback de la requete ajax qui redirige
+                                response.redirect('/todos')
                             },
                             json: () => {
                                 response.send(rowTodo);
@@ -205,8 +211,7 @@ router.delete('/todos/:todoId', function (request, response, next) {
                 html: () => {
 
                     request.session.destroy();
-                    response.end();
-                    // c'est le callback de la requete ajax qui redirige
+                    response.redirect('/todos')
                 },
                 json: () => {
                     response.status(204).end();
