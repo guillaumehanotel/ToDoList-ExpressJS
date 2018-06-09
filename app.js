@@ -11,8 +11,6 @@ const auth = require('./middlewares/auth.js');
 const helper = require('./helpers/helper.js');
 const Session = require('./models/Session');
 
-// TODO pour gérer PUT : method-override, dans le form edit : mettre action=action
-
 
 /*** SETTINGS ***/
 const app = express();
@@ -73,6 +71,8 @@ app.use('/public', express.static('public'));
 // Middleware Authentification
 app.use(function (req, res, next) {
 
+    console.log(req.headers)
+
     console.log("cookies présents : ");
     console.log(req.cookies);
 
@@ -88,7 +88,7 @@ app.use(function (req, res, next) {
 // Middleware : use current user data in views
 app.use(function (req, res, next) {
 
-    if (helper.isAccessTokenExist(req)) {
+    if (helper.isCookieAccessTokenExist(req)) {
         helper.addCurrentUserToLocals(req, res, next, Session);
     } else {
         next();

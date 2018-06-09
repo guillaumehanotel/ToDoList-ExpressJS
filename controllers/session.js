@@ -59,16 +59,26 @@ router.post('/sessions', function (request, response, next) {
 
                 } else {
                     // invalid password
-                    response.redirect('/sessions')
+                    response.format({
+                        html: () => response.redirect('/sessions'),
+                        json: () => response.send({error:"Invalid Password"})
+                    });
                 }
             } else {
                 // invalid email
-                response.redirect('/sessions')
+                response.format({
+                    html: () => response.redirect('/sessions'),
+                    json: () => response.send({error:"Invalid Email"})
+                });
             }
         }, next);
     } else {
         // champs pas remplis
-        response.redirect('/sessions')
+
+        response.format({
+            html: () => response.redirect('/sessions'),
+            json: () => response.send({error:"Empty fields"})
+        });
     }
 
 });

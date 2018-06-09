@@ -29,7 +29,7 @@ const checkAuthentification = function (request, response, next) {
         html: function() {
 
             // test si le cookie est présent
-            if (helper.isAccessTokenExist(request)) {
+            if (helper.isCookieAccessTokenExist(request)) {
 
                 let accessToken = request.cookies['accessToken'];
 
@@ -47,8 +47,9 @@ const checkAuthentification = function (request, response, next) {
                         response.clearCookie('accessToken');
                         response.locals.connectedUser = null;
                         request.session.connectedUser = null;
-
-                        response.redirect('/sessions')
+                        Session.truncate(function () {
+                            response.redirect('/sessions')
+                        }, next)
                     }
 
                 }).catch(next)
@@ -59,8 +60,30 @@ const checkAuthentification = function (request, response, next) {
             }
 
         }, json: () => {
-            //this.checkJSONAuthentification(request, response, next);
-            // todo token header
+
+            // comment mettre le header x-access-token ?
+
+            if (helper.isHeaderAccessTokenExist(request)) {
+
+                let accessToken = request.headers['x-access-token'];
+
+                checkToken(accessToken).then((isTokenValid) => {
+
+                    // check si sa date est valide
+                    if (isTokenValid) {
+                        //valide
+                        console.log('token valide');
+                        next()
+
+                    } else {
+                        response.send({error:"Invalid Token"})
+                    }
+
+                }).catch(next)
+
+            } else {
+                response.send({error:"You need to authenticate before (doesn't work)"})
+            }
 
         }
     });

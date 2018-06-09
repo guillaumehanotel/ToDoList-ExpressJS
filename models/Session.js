@@ -71,6 +71,18 @@ class Session {
     }
 
 
+    static truncate(callback, next){
+
+        let query_truncate= "DELETE FROM sessions";
+
+        db.run(query_truncate)
+            .then(() => {
+                callback();
+            })
+            .catch(next)
+    }
+
+
 }
 
 module.exports = Session;

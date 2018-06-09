@@ -35,11 +35,24 @@ module.exports = {
         return false;
     },
 
-    isAccessTokenExist: function (request) {
+    isCookieAccessTokenExist: function (request) {
         if (request.cookies) {
             return !(request.cookies['accessToken'] === undefined);
         }
         return false;
+    },
+
+    isHeaderAccessTokenExist: function(request){
+        if(request.headers){
+            return !(request.headers['x-access-token'] === undefined)
+        }
+        return false;
+    },
+
+    getAccessToken: function (request, response) {
+        if (this.isCookieAccessTokenExist(request)) {
+            return request.cookies['accessToken'];
+        }
     },
 
     addCurrentUserToLocals: async function (request, response, next, Session){
@@ -57,12 +70,6 @@ module.exports = {
                 next();
             }, next)
         }, next);
-    },
-
-    getAccessToken: function (request, response) {
-        if (this.isAccessTokenExist(request)) {
-            return request.cookies['accessToken'];
-        }
     },
 
     isRequestBelongToWhiteList: function (url, method) {
