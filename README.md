@@ -14,8 +14,3 @@
 ### Usage ###
 
     npm start
-
-### Credentials ###
-
-> * email : guillaume.hanotel@ynov.com  
-> * password : erty
